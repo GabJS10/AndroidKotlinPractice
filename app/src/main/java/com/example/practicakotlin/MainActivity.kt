@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.practicakotlin.ImcCalculator.ImcCalculatorActivity
+import com.example.practicakotlin.TODOAPP.TodoActivity
 import com.example.practicakotlin.firstapp.FirstAppActivity
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         val btnSaludoApp = findViewById<Button>(R.id.btnSaludoApp)
         val btnImc = findViewById<Button>(R.id.btnImc)
+        val btnTodo = findViewById<Button>(R.id.btnTodo)
 
         btnSaludoApp.setOnClickListener{
             val intent = Intent(this,FirstAppActivity::class.java)
@@ -34,5 +36,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this,ImcCalculatorActivity::class.java)
             startActivity(intent)
         }
+
+        btnTodo.setOnClickListener {
+            val intent = Intent(this,TodoActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
     }
 }
