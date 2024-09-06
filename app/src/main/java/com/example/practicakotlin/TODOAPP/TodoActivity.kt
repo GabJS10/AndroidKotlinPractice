@@ -2,6 +2,11 @@ package com.example.practicakotlin.TODOAPP
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -51,12 +56,12 @@ class TodoActivity : AppCompatActivity() {
     }
 
     private fun initUi(){
-        adapter = CategoriesAdapter(categories)
+        adapter = CategoriesAdapter(categories) { position -> onCategorySelected(position) }
         rcvCategorias.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
         rcvCategorias.adapter = adapter
 
 
-        task_adapter = TaskAdapter(tasks)
+        task_adapter = TaskAdapter(tasks){position -> onItemSelected(position)}
         rcvTareas.layoutManager = LinearLayoutManager(this)
         rcvTareas.adapter = task_adapter
 
@@ -68,9 +73,54 @@ class TodoActivity : AppCompatActivity() {
 
     private fun showDialog(){
         val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_add_task)
+
+        val btnAddTask = dialog.findViewById<Button>(R.id.btnAddTask)
+        val etTask = dialog.findViewById<EditText>(R.id.txtTask)
+        val rgCategories = dialog.findViewById<RadioGroup>(R.id.rgCategories)
+
+        btnAddTask.setOnClickListener{
+
+            if(etTask.text.toString().isEmpty()){
+                return@setOnClickListener
+            }
+
+            val selectedId = rgCategories.checkedRadioButtonId
+            val selectedRadioButton = rgCategories.findViewById<RadioButton>(selectedId)
+
+            val selectedCategory:TaskCategory = when(selectedRadioButton.text){
+                getString(R.string.todo_dialog_category_business) -> TaskCategory.Bussines
+                getString(R.string.todo_dialog_category_personal) -> TaskCategory.Personal
+                else -> TaskCategory.Other
+            }
+
+            tasks.add(Task(etTask.text.toString(),selectedCategory))
+            task_adapter.notifyDataSetChanged()
+            dialog.hide()
+        }
+
+
+
+        dialog.show()
 
     }
 
+    private fun onItemSelected(position:Int){
+        tasks[position].isSelected = !tasks[position].isSelected
+        task_adapter.notifyDataSetChanged()
+    }
+
+    private fun onCategorySelected(position:Int){
+        categories[position].selected = !categories[position].selected
+        adapter.notifyItemChanged( position)
+
+        val selectedCategories:List<TaskCategory> = categories.filter { it.selected }
+
+        val newTasks = tasks.filter { selectedCategories.contains(it.category) }
+        task_adapter.tasks = newTasks
+
+        task_adapter.notifyDataSetChanged()
+    }
 
 
 }

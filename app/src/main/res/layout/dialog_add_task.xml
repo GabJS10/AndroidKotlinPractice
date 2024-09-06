@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/todo_background_card"
+    android:padding="16dp"
     >
 
     <EditText

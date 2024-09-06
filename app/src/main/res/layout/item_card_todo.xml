@@ -7,7 +7,9 @@
     app:cardBackgroundColor="@color/todo_background_card"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="15dp"
-    app:cardCornerRadius="16dp">
+    app:cardCornerRadius="16dp"
+    android:id="@+id/cardCategory"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
